@@ -1,13 +1,60 @@
+import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { IShareRide } from "../../types";
 
 
 
 interface Props {
-    onShareRide: (ride: { name: string; from: string; to: string; dateTime: string; seats: number }) => void;
+    onShareRide: (data: IShareRide) => void;
     onClose: () => void;
 }
 
+const GOOGLE_MAPS_API_KEY = "AIzaSyB95TJpqJwe-eE7RcYIR30IWYcfOatwiZM";
+
+const getCoordinatesFromPlace = async (placeName: string): Promise<{ lat: number, lng: number } | null> => {
+    try {
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+            params: {
+                address: placeName,
+                key: GOOGLE_MAPS_API_KEY
+            }
+        });
+
+        const data = response.data;
+
+        if (data.status === "OK" && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            return { lat: location.lat, lng: location.lng };
+        } else {
+            console.error("No results found for this place.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching coordinates:", error);
+        return null;
+    }
+};
+
+const parseDateTime = (isoString: string): { date: string; time: string } => {
+    const dateObj = new Date(isoString);
+
+    // Format date as "YYYY-MM-DD"
+    const date = dateObj.toISOString().split("T")[0];
+
+    // Extract hours and minutes
+    let hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+
+    // Convert to 12-hour format
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 0 to 12 for AM format
+
+    // Format time as "hh:mm AM/PM"
+    const time = `${hours}:${minutes} ${ampm}`;
+
+    return { date, time };
+};
 const ShareRideForm: React.FC<Props> = ({ onShareRide, onClose, }) => {
     const [name, setName] = useState("");
     const [from, setFrom] = useState("");
@@ -15,9 +62,7 @@ const ShareRideForm: React.FC<Props> = ({ onShareRide, onClose, }) => {
     const [dateTime, setDateTime] = useState("");
     const [seats, setSeats] = useState("");
 
-
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!name.trim()) {
@@ -42,7 +87,30 @@ const ShareRideForm: React.FC<Props> = ({ onShareRide, onClose, }) => {
             return toast.error("Please enter a valid number of seats");
         }
 
-        onShareRide({ name, from, to, dateTime, seats: Number(seats) });
+        const fromdata = await getCoordinatesFromPlace(from)
+        const toData = await getCoordinatesFromPlace(to)
+        const parsedDateTime = parseDateTime(dateTime)
+        console.log(fromdata, toData);
+        console.log(parsedDateTime);
+
+        const data: IShareRide = {
+            clerkId: "user_12345",
+            from: {
+                place: from,
+                coordinates: [fromdata!.lat, fromdata!.lng],
+            },
+            to: {
+                place: to,
+                coordinates: [toData!.lat, toData!.lng],
+            },
+            date: new Date(parsedDateTime.date),
+            time: parsedDateTime.time,
+            name: name,
+            seats: +seats,
+        }
+
+
+        onShareRide(data);
     };
 
     return (

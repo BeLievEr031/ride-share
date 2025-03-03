@@ -1,39 +1,24 @@
-export interface IContact {
-    id: number;
+export interface IShareRide {
     clerkId: string;
+    from: {
+        place: string;
+        coordinates: [number, number]; // [longitude, latitude]
+    };
+    to: {
+        place: string;
+        coordinates: [number, number]; // [longitude, latitude]
+    };
+    date: Date;
+    time: string;
     name: string;
-    phone: string;
+    seats: number;
 }
 
-export interface IPagination {
-    page: number;
-    limit: number;
-    order: "asc" | "desc";
-    sortBy: string;
-    clerkId?: string;
-    userId?: string;
-}
-
-export interface IPhone {
-    numbers: string[]
-}
-
-export interface IAlert {
-    lat: number;
-    lng: number;
-    clerkId: string;
-}
-
-export interface IReportIncident {
-    incidentType: string;
-    lat: number;
-    lng: number;
-    description: string;
-}
-
-export interface IDangerZone {
-    lat: number;
-    lng: number;
-    clerkId: string;
-    zoneName: string;
+export interface IRideQueryParams {
+    fromLat: number;
+    fromLng: number;
+    toLat: number;
+    toLng: number;
+    date: string; // Format: YYYY-MM-DD
+    time: string; // Format: HH:mm
 }
