@@ -10,7 +10,7 @@ interface Props {
     onClose: () => void;
 }
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyB95TJpqJwe-eE7RcYIR30IWYcfOatwiZM";
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const getCoordinatesFromPlace = async (placeName: string): Promise<{ lat: number, lng: number } | null> => {
     try {

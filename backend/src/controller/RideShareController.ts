@@ -129,7 +129,8 @@ export const getRidesByLocation = async (req: Request, res: Response) => {
         const { fromLat, fromLng, toLat, toLng, date, time } = req.query;
 
         if (!fromLat || !fromLng || !toLat || !toLng || !date || !time) {
-            return res.status(400).json({ success: false, message: "Missing required query parameters." });
+            res.status(400).json({ success: false, message: "Missing required query parameters." });
+            return
         }
 
         const fromCoordinates = [parseFloat(fromLng as string), parseFloat(fromLat as string)];

@@ -30,7 +30,7 @@ const SearchBar: React.FC = () => {
             <div className="p-4 w-1/4 border-r flex flex-col">
                 <span className="text-gray-500 text-sm">Departure</span>
                 <input
-                    type="date"
+                    type="datetime-local"
                     value={departure}
                     onChange={(e) => setDeparture(e.target.value)}
                     className="outline-none text-black"
