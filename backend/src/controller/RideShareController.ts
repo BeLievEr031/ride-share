@@ -28,7 +28,7 @@ export const createRide = async (req: Request, res: Response) => {
         }
 
         // Validate time format (HH:mm)
-        const timeRegex = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
+        const timeRegex = /^(0?[1-9]|1[0-2]):([0-5]\d) (AM|PM)$/;
         if (!timeRegex.test(time)) {
             res.status(400).json({ success: false, message: "Time must be in HH:mm format." });
             return
@@ -129,14 +129,13 @@ export const getRidesByLocation = async (req: Request, res: Response) => {
         const { fromLat, fromLng, toLat, toLng, date, time } = req.query;
 
         if (!fromLat || !fromLng || !toLat || !toLng || !date || !time) {
-            res.status(400).json({ success: false, message: "Missing required query parameters." });
-            return;
+            return res.status(400).json({ success: false, message: "Missing required query parameters." });
         }
 
         const fromCoordinates = [parseFloat(fromLng as string), parseFloat(fromLat as string)];
         const toCoordinates = [parseFloat(toLng as string), parseFloat(toLat as string)];
         const selectedDate = new Date(date as string);
-        const selectedTime = time as string;
+        const normalizedTime = convertTo24HourFormat(time as string); // Convert AM/PM time to 24-hour format
 
         // MongoDB Query
         const rides = await ShareRideModel.find({
@@ -151,7 +150,7 @@ export const getRidesByLocation = async (req: Request, res: Response) => {
                 },
             ],
             date: { $eq: selectedDate },
-            time: { $eq: selectedTime },
+            time: { $eq: normalizedTime }, // Compare using converted 24-hour format
         });
 
         res.status(200).json({ success: true, data: rides });
@@ -159,3 +158,24 @@ export const getRidesByLocation = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: "Error fetching rides", error });
     }
 };
+
+/**
+ * Convert time from "HH:mm AM/PM" format to 24-hour format (HH:mm)
+ */
+const convertTo24HourFormat = (time12h: string): string => {
+    const match = time12h.match(/^(\d{1,2}):(\d{2}) (AM|PM)$/);
+    if (!match) return time12h; // Return original if format is invalid
+
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    const [_, hours, minutes, period] = match;
+    let hours24 = parseInt(hours, 10);
+
+    if (period === "PM" && hours24 !== 12) {
+        hours24 += 12;
+    } else if (period === "AM" && hours24 === 12) {
+        hours24 = 0;
+    }
+
+    return `${hours24.toString().padStart(2, "0")}:${minutes}`; // Return "HH:mm" in 24-hour format
+};
+
