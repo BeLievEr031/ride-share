@@ -17,6 +17,7 @@ export const useRideShareCreateMutation = (cb: (data: boolean) => void) => {
 export const useRideShareFetchQuery = (query: IRideQueryParams) => {
     return useQuery({
         queryKey: ["fetch-rides"],
-        queryFn: () => rideShareFetchQuery(query)
+        queryFn: () => rideShareFetchQuery(query),
+        enabled: false
     })
 }

@@ -15,10 +15,8 @@ export interface IShareRide {
 }
 
 export interface IRideQueryParams {
-    fromLat: number;
-    fromLng: number;
-    toLat: number;
-    toLng: number;
     date: string; // Format: YYYY-MM-DD
     time: string; // Format: HH:mm
+    from: string;
+    to: string;
 }
