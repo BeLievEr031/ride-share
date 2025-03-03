@@ -1,13 +1,15 @@
 import DriverCard from "../../components/ui/DriversCard"
 import SearchBar from "../../components/ui/SearchBar"
-import { rideShareFetchQuery } from "../../http/api";
-import { IRideQueryParams } from "../../types";
+import { searchRideShareFetchQuery } from "../../http/api";
+import { ISearch } from "../../types";
 
 function Book() {
 
-    const handleFetchShareRides = async (query: IRideQueryParams) => {
+    // const { } = useRideShareSearchFetchQuery();
+
+    const handleFetchShareRides = async (query: ISearch) => {
         try {
-            const data = await rideShareFetchQuery(query)
+            const data = await searchRideShareFetchQuery(query)
             console.log(data);
 
         } catch (error) {

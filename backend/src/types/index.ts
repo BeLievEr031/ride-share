@@ -22,3 +22,32 @@ export interface PaginationRequest extends Request {
         clerkId: string;
     }
 }
+
+export interface BookPaginationRequest extends Request {
+    query: {
+        passengerId: string;
+        page: string;
+        limit: string;
+        sortBy: string;
+        order: "asc" | "desc";
+    }
+}
+
+export interface SearchRequest extends Request {
+    query: {
+        from: string;
+        to: string;
+        date: string;
+    }
+}
+
+export interface IBook {
+    driverId: string;
+    passengerId: string;
+    rideId: string;
+    name: string;
+}
+
+export interface BookRideRequest extends Request {
+    body: IBook
+}

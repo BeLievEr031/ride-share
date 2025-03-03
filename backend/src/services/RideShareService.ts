@@ -41,6 +41,22 @@ class RideShareService {
         return await Ride.findByIdAndDelete(rideId);
     }
 
+    async search(from: string, to: string, date: string) {
+
+        const inputDate = new Date(date);
+
+        const startDate = new Date(inputDate);
+        startDate.setHours(0, 0, 0, 0);
+
+        const endDate = new Date(inputDate);
+        endDate.setHours(23, 59, 59, 999);
+
+        return await Ride.find({
+            from,
+            to,
+            date: { $gte: startDate, $lte: endDate },
+        });
+    }
 }
 
 export default RideShareService;

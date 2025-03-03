@@ -26,9 +26,9 @@ const Navbar = ({ setRideShare }: IProp) => {
                 <NavLink to="/ridea/home" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     Home
                 </NavLink>
-                <NavLink to="/ridea/map" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
+                {/* <NavLink to="/ridea/map" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     Map
-                </NavLink>
+                </NavLink> */}
                 <NavLink to="/ridea/book" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     Book
                 </NavLink>
@@ -41,8 +41,14 @@ const Navbar = ({ setRideShare }: IProp) => {
                 <NavLink to="/ridea/history" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     History
                 </NavLink>
-                <NavLink to="/ridea/notification" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
+                {/* <NavLink to="/ridea/notification" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     Notification
+                </NavLink> */}
+                <NavLink to="/ridea/your-rides" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
+                    Your Rides
+                </NavLink>
+                <NavLink to="/ridea/share-rides" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
+                    Share Rides
                 </NavLink>
             </div>
 

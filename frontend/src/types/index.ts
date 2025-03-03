@@ -1,17 +1,12 @@
 export interface IShareRide {
+    _id?: string;
     clerkId: string;
-    from: {
-        place: string;
-        coordinates: [number, number]; // [longitude, latitude]
-    };
-    to: {
-        place: string;
-        coordinates: [number, number]; // [longitude, latitude]
-    };
+    from: string;
+    to: string;
     date: Date;
-    time: string;
     name: string;
     seats: number;
+    cost: number;
 }
 
 export interface IRideQueryParams {
@@ -19,4 +14,18 @@ export interface IRideQueryParams {
     time: string; // Format: HH:mm
     from: string;
     to: string;
+}
+
+export interface IPagination {
+    page: number;
+    limit: number;
+    sortBy: string;
+    order: "asc" | "desc";
+    clerkId: string;
+}
+
+export interface ISearch {
+    from: string;
+    to: string;
+    date: string;
 }

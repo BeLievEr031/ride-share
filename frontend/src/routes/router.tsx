@@ -9,6 +9,7 @@ import Alert from "../pages/Alert/Alert";
 import History from "../pages/History/History";
 import Notification from "../pages/Notification/Notification";
 import IncomingRide from "../pages/IncomingRides/IncomingRides";
+import ShareRides from "../pages/Rides/ShareRides";
 
 const router = createBrowserRouter([
     {
@@ -46,7 +47,11 @@ const router = createBrowserRouter([
                     {
                         path: "notification",
                         element: <Notification />
-                    }
+                    },
+                    {
+                        path: "share-rides",
+                        element: <ShareRides />
+                    },
                 ]
             },
         ]

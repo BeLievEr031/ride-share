@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import ShareRideController from "../controller/RideShareController";
 import ShareRideService from "../services/RideShareService";
 import { shareRideValidator } from "../validator/rideShareValidation";
-import { ShareRideRequest, PaginationRequest } from "../types";
+import { ShareRideRequest, PaginationRequest, SearchRequest } from "../types";
 
 const shareRideRouter = express.Router();
 
@@ -17,9 +17,15 @@ shareRideRouter.post(
         shareRideController.create(req as ShareRideRequest, res, next)
 );
 
+shareRideRouter.get(
+    "/search",
+    (req: Request, res: Response, next: NextFunction) =>
+        shareRideController.search(req as SearchRequest, res, next)
+);
+
 // Get All Share Rides
 shareRideRouter.get(
-    "/",
+    "/get-all",
     (req: Request, res: Response, next: NextFunction) =>
         shareRideController.getAll(req as PaginationRequest, res, next)
 );
@@ -45,5 +51,9 @@ shareRideRouter.delete(
     (req: Request, res: Response, next: NextFunction) =>
         shareRideController.delete(req, res, next)
 );
+
+
+
+
 
 export default shareRideRouter;

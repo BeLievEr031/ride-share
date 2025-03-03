@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Button from "../Button";
-import { IRideQueryParams } from "../../types";
-import { getCoordinatesFromPlace, parseDateTime } from "../../utils/location";
+import { ISearch } from "../../types";
 
 interface IProp {
-    handleFetchShareRides: (query: IRideQueryParams) => void
+    handleFetchShareRides: (query: ISearch) => void
 }
 
 const SearchBar: React.FC<IProp> = ({ handleFetchShareRides }) => {
@@ -17,21 +16,13 @@ const SearchBar: React.FC<IProp> = ({ handleFetchShareRides }) => {
         try {
 
 
-            console.log(from);
-            console.log(to);
-            console.log(departure);
-            const { date, time } = parseDateTime(departure)
-            const coordinates1 = await getCoordinatesFromPlace(from);
-            const coordinates2 = await getCoordinatesFromPlace(to);
-            console.log(coordinates1);
-            console.log(coordinates2);
-
-            const query: IRideQueryParams = {
-                date,
-                time,
+            const query: ISearch = {
+                date: departure,
                 from,
                 to,
             }
+
+            console.log(query);
 
             await handleFetchShareRides(query);
 

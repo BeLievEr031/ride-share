@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import ShareRideService from "../services/RideShareService";
 import { HTTP_STATUS } from "../utils/constant";
-import { ShareRideRequest, PaginationRequest } from "../types";
+import { ShareRideRequest, PaginationRequest, SearchRequest } from "../types";
+import logger from "../config/logger";
 
 class ShareRideController {
     constructor(private shareRideService: ShareRideService) {
@@ -43,6 +44,8 @@ class ShareRideController {
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || "date";
             const order = (req.query.order as string) || "asc";
+
+            logger.info(userId, page, limit, sortBy, order);
 
             const result = await this.shareRideService.getAll(userId, page, limit, sortBy, order);
             res.status(HTTP_STATUS.OK).json({
@@ -120,6 +123,29 @@ class ShareRideController {
             }
 
             res.status(HTTP_STATUS.OK).json({ success: true, message: "Ride deleted successfully." });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async search(req: SearchRequest, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
+                return;
+            }
+
+            const from = req.query.from;
+            const to = req.query.to;
+            const date = req.query.date;
+
+            const result = await this.shareRideService.search(from, to, date);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: "Rides fetched successfully.",
+                data: result,
+            });
         } catch (error) {
             next(error);
         }
