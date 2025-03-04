@@ -6,6 +6,7 @@ export interface IBook extends Document {
     rideId: string;
     name: string;
     seats: number;
+    status: "pending" | "accepted" | "declined" | "completed"
 }
 
 const BookSchema = new Schema<IBook>(
@@ -14,7 +15,11 @@ const BookSchema = new Schema<IBook>(
         passengerId: { type: String, required: true },
         rideId: { type: String, required: true },
         name: { type: String, required: true },
-        seats: { type: Number, required: true }
+        seats: { type: Number, required: true },
+        status: {
+            type: String,
+            enum: ["pending", "accepted", "declined", "completed"]
+        }
     },
     { timestamps: true }
 );

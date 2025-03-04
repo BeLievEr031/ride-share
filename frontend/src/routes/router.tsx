@@ -10,6 +10,7 @@ import History from "../pages/History/History";
 import Notification from "../pages/Notification/Notification";
 import IncomingRide from "../pages/IncomingRides/IncomingRides";
 import ShareRides from "../pages/Rides/ShareRides";
+import BookingList from "../pages/Booking/Booking";
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
                     {
                         path: "share-rides",
                         element: <ShareRides />
+                    },
+                    {
+                        path: "your-rides",
+                        element: <BookingList />
                     },
                 ]
             },

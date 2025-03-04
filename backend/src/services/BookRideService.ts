@@ -15,6 +15,7 @@ class BookRideService {
 
         const [bookings, totalBookings] = await Promise.all([
             Book.find({ passengerId })
+                .populate("rideId")
                 .sort({ [sortBy]: sortOrder })
                 .skip(offset)
                 .limit(limit),
