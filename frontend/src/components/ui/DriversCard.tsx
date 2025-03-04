@@ -2,6 +2,7 @@ import React from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Button from "../Button";
 import { IShareRide } from "../../types";
+import { Iinfo } from "../../pages/Book/Book";
 
 // interface Ride {
 //     _id: string;
@@ -29,10 +30,11 @@ import { IShareRide } from "../../types";
 
 
 interface IProp {
-    rides: IShareRide[]
+    rides: IShareRide[];
+    onOpen: (data: Iinfo) => void
 }
 
-const DriverCard: React.FC<IProp> = ({ rides }) => {
+const DriverCard: React.FC<IProp> = ({ rides, onOpen }) => {
     return (
         <div className="max-w-4xl mx-auto p-4">
             {rides.map((ride: IShareRide) => (
@@ -77,7 +79,7 @@ const DriverCard: React.FC<IProp> = ({ rides }) => {
                     </div>
 
                     {/* Right Section: Action Button */}
-                    <Button className="bg-orange-500 text-white px-6 py-2 rounded-md font-semibold hover:bg-orange-600">
+                    <Button className="bg-orange-500 text-white px-6 py-2 rounded-md font-semibold hover:bg-orange-600" onClick={() => onOpen({ driverId: ride.clerkId, rideId: ride._id! })}>
                         Book Now
                     </Button>
                 </div>

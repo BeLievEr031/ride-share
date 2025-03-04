@@ -46,6 +46,7 @@ export interface IBook {
     passengerId: string;
     rideId: string;
     name: string;
+    seats: number;
 }
 
 export interface BookRideRequest extends Request {

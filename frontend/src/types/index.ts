@@ -29,3 +29,11 @@ export interface ISearch {
     to: string;
     date: string;
 }
+
+export interface IBook {
+    driverId: string;
+    passengerId: string;
+    rideId: string;
+    name: string;
+    seats: number;
+}

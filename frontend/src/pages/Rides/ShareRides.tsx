@@ -44,10 +44,9 @@ function ShareRides() {
         clerkId: user!.id,
     });
 
-    const { data, isError, isLoading, error } = useRideShareFetchQuery(pagination)
-    const [rides] = useState<IShareRide[]>(data?.data?.data?.rides.length > 0 ? data?.data?.data?.rides as IShareRide[] : [])
+    const { data, isError, isPending, error } = useRideShareFetchQuery(pagination)
 
-    if (isLoading) {
+    if (isPending) {
         return <div>Loading...</div>
     }
 
@@ -55,12 +54,11 @@ function ShareRides() {
         return <div>{error.message}</div>
     }
 
-    console.log(data?.data?.data?.rides);
 
     return (
         <div className="grid grid-cols-5 gap-3 px-2 py-4">
             {
-                rides.map((item: IShareRide, index: number) => {
+                data?.data?.data?.rides.length > 0 && data?.data?.data?.rides.map((item: IShareRide, index: number) => {
                     return <ShareRideCard ride={item} key={index} />
                 })
             }

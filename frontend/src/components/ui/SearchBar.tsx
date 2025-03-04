@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import Button from "../Button";
 import { ISearch } from "../../types";
 
 interface IProp {
-    handleFetchShareRides: (query: ISearch) => void
+    handleFetchShareRides: (query: ISearch) => void;
 }
 
 const SearchBar: React.FC<IProp> = ({ handleFetchShareRides }) => {
@@ -11,26 +12,31 @@ const SearchBar: React.FC<IProp> = ({ handleFetchShareRides }) => {
     const [to, setTo] = useState("");
     const [departure, setDeparture] = useState("");
 
-
     const handleClick = async () => {
-        try {
-
-
-            const query: ISearch = {
-                date: departure,
-                from,
-                to,
-            }
-
-            console.log(query);
-
-            await handleFetchShareRides(query);
-
-        } catch (error) {
-            console.log(error);
-
+        // Validation
+        if (!from.trim()) {
+            toast.error("Please enter the departure location.");
+            return;
         }
-    }
+        if (!to.trim()) {
+            toast.error("Please enter the destination.");
+            return;
+        }
+        if (!departure) {
+            toast.error("Please select a departure date.");
+            return;
+        }
+
+        try {
+            const query: ISearch = { date: departure, from, to };
+            console.log(query);
+            await handleFetchShareRides(query);
+            toast.success("Search successful!");
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while searching.");
+        }
+    };
 
     return (
         <div className="flex items-center border rounded-lg overflow-hidden max-w-4xl mx-auto shadow-md px-2 mt-4">
@@ -64,7 +70,10 @@ const SearchBar: React.FC<IProp> = ({ handleFetchShareRides }) => {
             </div>
 
             {/* Search Button */}
-            <Button className="bg-orange-500 mx-2 text-white px-6 py-4 font-semibold hover:bg-orange-600 w-1/4" onClick={handleClick}>
+            <Button
+                className="bg-orange-500 mx-2 text-white px-6 py-4 font-semibold hover:bg-orange-600 w-1/4"
+                onClick={handleClick}
+            >
                 Search
             </Button>
         </div>
