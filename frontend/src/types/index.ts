@@ -37,3 +37,11 @@ export interface IBook {
     name: string;
     seats: number;
 }
+
+export interface BookingPagination {
+    passengerId: string;
+    page: string;
+    limit: string;
+    sortBy: string;
+    order: "asc" | "desc";
+}

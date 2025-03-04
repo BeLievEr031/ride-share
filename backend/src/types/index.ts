@@ -1,4 +1,5 @@
 import { Request } from "express"
+import mongoose from "mongoose";
 export interface IShareRide {
     clerkId: string;
     from: string;
@@ -44,7 +45,7 @@ export interface SearchRequest extends Request {
 export interface IBook {
     driverId: string;
     passengerId: string;
-    rideId: string;
+    rideId: mongoose.Schema.Types.ObjectId;
     name: string;
     seats: number;
 }

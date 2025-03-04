@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import { usePassengerBookingFetchQuery } from "../../hook/useBookRide";
+import { useUser } from "@clerk/clerk-react";
+import { BookingPagination } from "../../types";
 
 interface Booking {
     driverId: string;
     passengerId: string;
-    rideId: string;
+    rideId: {
+        _id: string;
+        cost: number;
+    };
     name: string;
     seats: number;
     status: "pending" | "accepted" | "declined" | "completed";
@@ -34,7 +40,7 @@ const BookingCard: React.FC<{ booking: Booking }> = ({ booking }) => {
             <div className="flex justify-between items-center mb-4">
                 <div className="text-gray-500 text-sm">
                     <p className="font-medium">Ride ID:</p>
-                    <p className="text-gray-700">{booking.rideId}</p>
+                    <p className="text-gray-700">{booking.rideId._id}</p>
                 </div>
                 <div className="text-gray-500 text-sm">
                     <p className="font-medium">Seats:</p>
@@ -59,58 +65,80 @@ const BookingCard: React.FC<{ booking: Booking }> = ({ booking }) => {
 };
 
 // Dummy Data with Amount
-const dummyBookings: Booking[] = [
-    {
-        driverId: "driver_123",
-        passengerId: "passenger_456",
-        rideId: "ride_789",
-        name: "John Doe",
-        seats: 2,
-        status: "accepted",
-        amount: 50,
-        createdAt: "2025-03-01T14:30:00Z",
-    },
-    {
-        driverId: "driver_987",
-        passengerId: "passenger_654",
-        rideId: "ride_321",
-        name: "Jane Smith",
-        seats: 1,
-        status: "pending",
-        amount: 30,
-        createdAt: "2025-03-02T09:15:00Z",
-    },
-    {
-        driverId: "driver_111",
-        passengerId: "passenger_222",
-        rideId: "ride_333",
-        name: "Alice Brown",
-        seats: 3,
-        status: "completed",
-        amount: 75,
-        createdAt: "2025-02-28T18:00:00Z",
-    },
-    {
-        driverId: "driver_444",
-        passengerId: "passenger_555",
-        rideId: "ride_999",
-        name: "Robert Green",
-        seats: 2,
-        status: "declined",
-        amount: 40,
-        createdAt: "2025-02-25T12:45:00Z",
-    },
-];
+// const dummyBookings: Booking[] = [
+//     {
+//         driverId: "driver_123",
+//         passengerId: "passenger_456",
+//         rideId: "ride_789",
+//         name: "John Doe",
+//         seats: 2,
+//         status: "accepted",
+//         amount: 50,
+//         createdAt: "2025-03-01T14:30:00Z",
+//     },
+//     {
+//         driverId: "driver_987",
+//         passengerId: "passenger_654",
+//         rideId: "ride_321",
+//         name: "Jane Smith",
+//         seats: 1,
+//         status: "pending",
+//         amount: 30,
+//         createdAt: "2025-03-02T09:15:00Z",
+//     },
+//     {
+//         driverId: "driver_111",
+//         passengerId: "passenger_222",
+//         rideId: "ride_333",
+//         name: "Alice Brown",
+//         seats: 3,
+//         status: "completed",
+//         amount: 75,
+//         createdAt: "2025-02-28T18:00:00Z",
+//     },
+//     {
+//         driverId: "driver_444",
+//         passengerId: "passenger_555",
+//         rideId: "ride_999",
+//         name: "Robert Green",
+//         seats: 2,
+//         status: "declined",
+//         amount: 40,
+//         createdAt: "2025-02-25T12:45:00Z",
+//     },
+// ];
 
 // Parent Component to Render Bookings
 const BookingList: React.FC = () => {
+    const { user } = useUser();
+    const [pagination] = useState<BookingPagination>({
+        passengerId: user!.id,
+        page: "1",
+        limit: "25",
+        sortBy: "createdAt",
+        order: "asc"
+    })
+    const { data } = usePassengerBookingFetchQuery(pagination);
+
+    console.log(data?.data?.data?.bookings);
+
     return (
         <div className="p-6 space-y-6">
             <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">Bookings</h1>
             <div className="grid grid-cols-4 gap-4">
-                {dummyBookings.map((booking, index) => (
-                    <BookingCard key={index} booking={booking} />
-                ))}
+                {data?.data?.data?.bookings.length > 0 && data?.data?.data?.bookings.map((booking: Booking, index: number) => {
+                    const item: Booking = {
+                        driverId: booking.driverId,
+                        passengerId: booking.passengerId,
+                        rideId: { _id: booking.rideId._id, cost: booking.rideId.cost },
+                        name: booking.name,
+                        seats: booking.seats,
+                        status: booking.status,
+                        amount: booking.rideId.cost, // Mapping ride cost to amount
+                        createdAt: booking.createdAt,
+                    }
+                    return <BookingCard key={index} booking={item} />
+                })}
             </div>
         </div>
     );

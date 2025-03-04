@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IBook extends Document {
     driverId: string;
     passengerId: string;
-    rideId: string;
+    rideId: Schema.Types.ObjectId;
     name: string;
     seats: number;
     status: "pending" | "accepted" | "declined" | "completed"
@@ -13,12 +13,16 @@ const BookSchema = new Schema<IBook>(
     {
         driverId: { type: String, required: true },
         passengerId: { type: String, required: true },
-        rideId: { type: String, required: true },
+        rideId: {
+            type: Schema.Types.ObjectId,
+            ref: "ShareRide"
+        },
         name: { type: String, required: true },
         seats: { type: Number, required: true },
         status: {
             type: String,
-            enum: ["pending", "accepted", "declined", "completed"]
+            enum: ["pending", "accepted", "declined", "completed"],
+            default: "pending"
         }
     },
     { timestamps: true }
