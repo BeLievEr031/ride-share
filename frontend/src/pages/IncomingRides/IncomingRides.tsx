@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaMapMarkerAlt, FaUser, FaClock, FaDollarSign, FaCheck, FaTimes } from "react-icons/fa";
+import { FaMapMarkerAlt, FaUser, FaClock, FaDollarSign, FaCheck } from "react-icons/fa";
 import { useIncomingRideFetchQuery, useUpdateBookingRideStatusMutation } from "../../hook/useBookRide";
 import { IncomingRideBookingPagination } from "../../types";
 import { useUser } from "@clerk/clerk-react";
@@ -140,12 +140,13 @@ const IncomingRide: React.FC = () => {
                             </button> :
                                 <button className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
                                     onClick={() => handleUpdateStatus(rideRequest._id!, "completed")}
+                                    disabled={rideRequest.status === "paid" ? true : false}
                                 >
-                                    <FaCheck /> <span>Completed</span>
+                                    <FaCheck /> <span>{rideRequest.status === "paid" ? "Paid" : "Completed"}</span>
                                 </button>}
-                            <button className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600">
+                            {/* <button className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600">
                                 <FaTimes /> <span>Decline</span>
-                            </button>
+                            </button> */}
                         </div>
                     </div >
                 })
