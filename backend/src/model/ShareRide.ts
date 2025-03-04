@@ -13,8 +13,8 @@ export interface IShareRide extends Document {
 // Schema
 const ShareRideSchema = new Schema<IShareRide>({
     clerkId: { type: String, required: true },
-    from: { type: String, required: true },
-    to: { type: String, required: true },
+    from: { type: String, required: true, lowercase: true },
+    to: { type: String, required: true, lowercase: true },
     date: { type: Date, required: true },
     name: { type: String, required: true },
     seats: { type: Number, required: true },

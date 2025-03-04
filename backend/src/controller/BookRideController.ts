@@ -4,6 +4,7 @@ import BookRideService from "../services/BookRideService";
 import { HTTP_STATUS } from "../utils/constant";
 import { BookPaginationRequest, BookRideRequest, } from "../types";
 import logger from "../config/logger";
+import ShareRideModel from "../model/ShareRide";
 
 class BookRideController {
     constructor(private bookRideService: BookRideService) {
@@ -19,7 +20,33 @@ class BookRideController {
                 return;
             }
 
+            const { driverId, rideId, seats } = req.body
+
+            const ride = await ShareRideModel.findOne({ clerkId: driverId, _id: rideId })
+
+
+            if (!ride) {
+                res.status(HTTP_STATUS.NOT_FOUND).json({
+                    success: false,
+                    message: "No ride found."
+                })
+                return;
+            }
+
+
+            if (ride.seats < seats) {
+                res.status(HTTP_STATUS.CONFLICT).json({
+                    success: false,
+                    message: "Seats are not available."
+                })
+                return;
+            }
+
+
+            ride.seats -= seats;
+            await ride.save();
             const booking = await this.bookRideService.createBooking(req.body);
+
             res.status(HTTP_STATUS.CREATED).json({
                 success: true,
                 data: booking,

@@ -2,10 +2,11 @@ import { useState } from "react";
 import DriverCard from "../../components/ui/DriversCard"
 import SearchBar from "../../components/ui/SearchBar"
 import { searchRideShareFetchQuery } from "../../http/api";
-import { ISearch, IShareRide } from "../../types";
+import { IBook, ISearch, IShareRide } from "../../types";
 import BookingForm from "../../components/ui/BookingForm";
 import { Toaster } from "react-hot-toast";
 import { useUser } from "@clerk/clerk-react";
+import { useBookRideCreateMutation } from "../../hook/useBookRide";
 
 
 export interface Iinfo { driverId: string; rideId: string }
@@ -13,6 +14,7 @@ export interface Iinfo { driverId: string; rideId: string }
 function Book() {
     const { user } = useUser();
     // const { } = useRideShareSearchFetchQuery();
+    const { mutate } = useBookRideCreateMutation();
     const [rides, setRides] = useState<IShareRide[]>([])
     const [bookRide, setBookRide] = useState<boolean>(false)
     const [info, setInfo] = useState<Iinfo | null>(null)
@@ -32,6 +34,16 @@ function Book() {
             ...info,
             passengerId: user!.id
         });
+
+        const bookData: IBook = {
+            driverId: info!.driverId,
+            rideId: info!.rideId,
+            name: data.name,
+            seats: data.seats,
+            passengerId: user!.id
+        }
+
+        mutate(bookData);
 
     }
 
