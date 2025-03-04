@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import BookRideService from "../services/BookRideService";
 import { HTTP_STATUS } from "../utils/constant";
-import { BookPaginationRequest, BookRideRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, } from "../types";
 import logger from "../config/logger";
 import ShareRideModel from "../model/ShareRide";
 
@@ -154,6 +154,34 @@ class BookRideController {
             next(error);
         }
     }
+
+    async getAllIncomingRides(req: IncomingRidePaginationRequest, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
+                return;
+            }
+
+            const driverId = req.query.driverId;
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || "createdAt";
+            const order = (req.query.order as string) || "desc";
+
+            logger.info(driverId, page, limit, sortBy, order);
+
+            const result = await this.bookRideService.getAllIncomingRides(driverId, page, limit, sortBy, order);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: "Incoming Rides Bookings fetched successfully.",
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 export default BookRideController;

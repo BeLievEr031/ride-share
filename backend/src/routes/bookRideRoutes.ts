@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import BookRideController from "../controller/BookRideController";
 import BookRideService from "../services/BookRideService";
 import { bookRideValidation } from "../validator/bookRideValidation";
-import { BookPaginationRequest, BookRideRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, } from "../types";
 
 const bookRideRouter = express.Router();
 
@@ -45,5 +45,14 @@ bookRideRouter.delete(
     (req: Request, res: Response, next: NextFunction) =>
         bookRideController.delete(req, res, next)
 );
+
+bookRideRouter.get(
+    "/incoming-rides",
+    (req: Request, res: Response, next: NextFunction) =>
+        bookRideController.getAllIncomingRides(req as IncomingRidePaginationRequest, res, next)
+);
+
+
+
 
 export default bookRideRouter;

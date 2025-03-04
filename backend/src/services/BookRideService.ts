@@ -32,6 +32,29 @@ class BookRideService {
         };
     }
 
+    async getAllIncomingRides(driverId: string, page: number, limit: number, sortBy: string, order: string) {
+        const offset = (page - 1) * limit;
+        const sortOrder = order === "asc" ? 1 : -1;
+
+        const [bookings, totalBookings] = await Promise.all([
+            Book.find({ driverId })
+                .populate("rideId")
+                .sort({ [sortBy]: sortOrder })
+                .skip(offset)
+                .limit(limit),
+            Book.countDocuments({ driverId })
+        ]);
+
+        return {
+            bookings,
+            pagination: {
+                totalBookings,
+                currentPage: page,
+                totalPages: Math.ceil(totalBookings / limit),
+            },
+        };
+    }
+
     // Get a booking by ID
     async getBookingById(bookingId: string): Promise<IBook | null> {
         return await Book.findById(bookingId);

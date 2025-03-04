@@ -34,6 +34,16 @@ export interface BookPaginationRequest extends Request {
     }
 }
 
+export interface IncomingRidePaginationRequest extends Request {
+    query: {
+        driverId: string;
+        page: string;
+        limit: string;
+        sortBy: string;
+        order: "asc" | "desc";
+    }
+}
+
 export interface SearchRequest extends Request {
     query: {
         from: string;
