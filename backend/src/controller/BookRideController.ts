@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import BookRideService from "../services/BookRideService";
 import { HTTP_STATUS } from "../utils/constant";
-import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
 import logger from "../config/logger";
 import ShareRideModel from "../model/ShareRide";
 
@@ -176,6 +176,33 @@ class BookRideController {
                 success: true,
                 message: "Incoming Rides Bookings fetched successfully.",
                 data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
+    async updateStatus(req: StatusUpdateRequest, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
+                return;
+            }
+
+            const { _id, status } = req.body;
+            const updatedBooking = await this.bookRideService.updateStatus(_id, status);
+
+            if (!updatedBooking) {
+                res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Booking not found" });
+                return;
+            }
+
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                data: updatedBooking,
+                message: "Booking status updated successfully.",
             });
         } catch (error) {
             next(error);

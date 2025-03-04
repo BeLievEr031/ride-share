@@ -1,9 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { usePassengerBookingFetchQuery } from "../../hook/useBookRide";
+import { usePassengerBookingFetchQuery, useUpdateBookingRideStatusMutation } from "../../hook/useBookRide";
 import { useUser } from "@clerk/clerk-react";
 import { BookingPagination } from "../../types";
+import Button from "../../components/Button";
+import { createPaymentOrder } from "../../http/api";
+
+declare global {
+    interface Window {
+        Razorpay: any;
+    }
+}
 
 interface Booking {
+    _id?: string;
     driverId: string;
     passengerId: string;
     rideId: {
@@ -25,7 +35,74 @@ const statusColors: Record<Booking["status"], string> = {
     completed: "bg-blue-100 text-blue-600",
 };
 
+interface IOrder {
+    amount: number;
+    currency: number;
+    id: string;
+}
+
 const BookingCard: React.FC<{ booking: Booking }> = ({ booking }) => {
+    const { mutate } = useUpdateBookingRideStatusMutation();
+
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) {
+                resolve(true);
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.async = true;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    const handdlePayment = async (data: { _id: string, id: string }) => {
+        try {
+            const isLoaded = await loadRazorpayScript();
+            if (!isLoaded) {
+                alert("Failed to load Razorpay. Please try again.");
+                return;
+            }
+
+            const orderData = await createPaymentOrder(data);
+            const order: IOrder = orderData.data;
+
+            const options = {
+                key: "rzp_test_cMQQFYPaYpEzfm", // Replace with actual Razorpay Key ID
+                amount: order.amount,
+                currency: order.currency,
+                name: "Your Company",
+                description: "Test Transaction",
+                order_id: order.id,
+                handler: async () => {
+                    mutate({ _id: data._id, status: "paid" });
+                    alert("Payment successful!");
+                },
+
+
+
+                prefill: {
+                    name: "John Doe",
+                    email: "johndoe@example.com",
+                    contact: "9999999999",
+                },
+
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden p-6 border border-gray-200">
             {/* Header */}
@@ -60,6 +137,12 @@ const BookingCard: React.FC<{ booking: Booking }> = ({ booking }) => {
 
             {/* Timestamp */}
             <p className="text-gray-400 text-sm text-center">Booked on: {new Date(booking.createdAt).toLocaleString()}</p>
+
+            {booking.status === "completed" && <Button
+                onClick={() => handdlePayment({ _id: booking._id!, id: booking.rideId._id })}
+            >
+                Pay
+            </Button>}
         </div>
     );
 };
@@ -128,6 +211,7 @@ const BookingList: React.FC = () => {
             <div className="grid grid-cols-4 gap-4">
                 {data?.data?.data?.bookings.length > 0 && data?.data?.data?.bookings.map((booking: Booking, index: number) => {
                     const item: Booking = {
+                        _id: booking._id,
                         driverId: booking.driverId,
                         passengerId: booking.passengerId,
                         rideId: { _id: booking.rideId._id, cost: booking.rideId.cost },

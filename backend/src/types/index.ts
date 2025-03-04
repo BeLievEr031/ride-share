@@ -63,3 +63,16 @@ export interface IBook {
 export interface BookRideRequest extends Request {
     body: IBook
 }
+
+export interface StatusUpdateRequest extends Request {
+    body: {
+        _id: mongoose.Schema.Types.ObjectId;
+        status: string;
+    }
+}
+
+export interface CreateOrderRequest {
+    body: {
+        id: mongoose.Schema.Types.ObjectId;
+    }
+}

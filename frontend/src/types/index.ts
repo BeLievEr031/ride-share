@@ -45,3 +45,16 @@ export interface BookingPagination {
     sortBy: string;
     order: "asc" | "desc";
 }
+
+export interface IncomingRideBookingPagination {
+    driverId: string;
+    page: string;
+    limit: string;
+    sortBy: string;
+    order: "asc" | "desc";
+}
+
+export interface BookingStatusUpdate {
+    _id: string;
+    status: string;
+}

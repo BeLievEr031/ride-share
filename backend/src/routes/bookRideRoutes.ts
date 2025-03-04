@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import BookRideController from "../controller/BookRideController";
 import BookRideService from "../services/BookRideService";
 import { bookRideValidation } from "../validator/bookRideValidation";
-import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
 
 const bookRideRouter = express.Router();
 
@@ -24,6 +24,21 @@ bookRideRouter.get(
         bookRideController.getAll(req as BookPaginationRequest, res, next)
 );
 
+
+bookRideRouter.get(
+    "/incoming-rides",
+    (req: Request, res: Response, next: NextFunction) =>
+        bookRideController.getAllIncomingRides(req as IncomingRidePaginationRequest, res, next)
+);
+
+
+bookRideRouter.put(
+    "/update-status",
+    (req: Request, res: Response, next: NextFunction) =>
+        bookRideController.updateStatus(req as StatusUpdateRequest, res, next)
+
+);
+
 // Get booking by ID
 bookRideRouter.get(
     "/:id",
@@ -39,6 +54,7 @@ bookRideRouter.put(
         bookRideController.update(req as BookRideRequest, res, next)
 );
 
+
 // Delete booking
 bookRideRouter.delete(
     "/:id",
@@ -46,11 +62,6 @@ bookRideRouter.delete(
         bookRideController.delete(req, res, next)
 );
 
-bookRideRouter.get(
-    "/incoming-rides",
-    (req: Request, res: Response, next: NextFunction) =>
-        bookRideController.getAllIncomingRides(req as IncomingRidePaginationRequest, res, next)
-);
 
 
 

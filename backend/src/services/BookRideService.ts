@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Book from "../model/BookRide";
 import { IBook } from "../types";
 
@@ -36,7 +37,7 @@ class BookRideService {
         const offset = (page - 1) * limit;
         const sortOrder = order === "asc" ? 1 : -1;
 
-        const [bookings, totalBookings] = await Promise.all([
+        const [incomingRides, totalBookings] = await Promise.all([
             Book.find({ driverId })
                 .populate("rideId")
                 .sort({ [sortBy]: sortOrder })
@@ -46,7 +47,7 @@ class BookRideService {
         ]);
 
         return {
-            bookings,
+            incomingRides,
             pagination: {
                 totalBookings,
                 currentPage: page,
@@ -63,6 +64,19 @@ class BookRideService {
     // Update a booking
     async updateBooking(bookingId: string, updateData: Partial<IBook>): Promise<IBook | null> {
         return await Book.findByIdAndUpdate(bookingId, updateData, { new: true });
+    }
+
+    async updateStatus(id: mongoose.Schema.Types.ObjectId, status: string) {
+        return await Book.findOneAndUpdate({
+            _id: id
+        },
+            {
+                $set: {
+                    status
+                }
+            }, {
+            new: true
+        })
     }
 
     // Delete a booking

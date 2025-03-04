@@ -21,7 +21,7 @@ const BookSchema = new Schema<IBook>(
         seats: { type: Number, required: true },
         status: {
             type: String,
-            enum: ["pending", "accepted", "declined", "completed"],
+            enum: ["pending", "accepted", "declined", "completed", "paid"],
             default: "pending"
         }
     },

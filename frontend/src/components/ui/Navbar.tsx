@@ -45,7 +45,7 @@ const Navbar = ({ setRideShare }: IProp) => {
                     Notification
                 </NavLink> */}
                 <NavLink to="/ridea/your-rides" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
-                    Your Rides
+                    Booked Rides
                 </NavLink>
                 <NavLink to="/ridea/share-rides" className={({ isActive }) => isActive ? "text-blue-600 underline" : "text-gray-700"}>
                     Share Rides
