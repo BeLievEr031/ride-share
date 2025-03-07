@@ -5,6 +5,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import shareRideRouter from "./routes/shareRideRoutes";
 import bookRideRouter from "./routes/bookRideRoutes";
 import paymentRouter from "./routes/payment";
+import contactRouter from "./routes/contactRouter";
 const app = express();
 
 app.use(cors({
@@ -19,6 +20,7 @@ app.use(cookieParser())
 app.use("/ride", shareRideRouter)
 app.use("/ride-book", bookRideRouter)
 app.use("/payment", paymentRouter)
+app.use("/contact", contactRouter)
 app.use(errorHandler)
 
 export default app;

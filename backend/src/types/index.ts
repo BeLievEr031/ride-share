@@ -21,6 +21,7 @@ export interface PaginationRequest extends Request {
         sortBy: string;
         order: "asc" | "desc";
         clerkId: string;
+        userId: string;
     }
 }
 
@@ -75,4 +76,25 @@ export interface CreateOrderRequest {
     body: {
         id: mongoose.Schema.Types.ObjectId;
     }
+}
+
+export interface IContact {
+    clerkId: string;
+    name: string;
+    email: string;
+}
+
+
+export interface ContactRequest extends Request {
+    body: IContact
+}
+
+export interface IPhone {
+    numbers: string[];
+    url: string;
+    email: string[]
+}
+
+export interface SendAlertRequest {
+    body: IPhone
 }
