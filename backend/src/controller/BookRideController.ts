@@ -211,7 +211,7 @@ class BookRideController {
 
     async getHistory(req: HistoryRequest, res: Response, next: NextFunction) {
         try {
-            const { driverId, passengerId } = req.body;
+            const { driverId, passengerId } = req.query;
 
             if (driverId) {
                 const histories = await this.bookRideService.driverHistory(driverId);

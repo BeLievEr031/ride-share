@@ -71,3 +71,34 @@ export interface IEmail {
     email: string[];
     url: string;
 }
+
+export interface IHistory {
+    passengerId?: string;
+    driverId?: string;
+}
+
+// Importing necessary types from TypeScript
+interface RideId {
+    _id: string;
+    clerkId: string;
+    from: string;
+    to: string;
+    date: string;
+    name: string;
+    seats: number;
+    cost: number;
+    __v: number;
+}
+
+export interface IRide {
+    _id: string;
+    driverId: string;
+    passengerId: string;
+    rideId: RideId;
+    name: string;
+    seats: number;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}

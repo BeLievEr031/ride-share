@@ -73,7 +73,7 @@ export interface StatusUpdateRequest extends Request {
 }
 
 export interface HistoryRequest extends Request {
-    body: {
+    query: {
         passengerId?: string;
         driverId?: string;
     }
