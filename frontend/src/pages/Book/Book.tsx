@@ -44,6 +44,8 @@ function Book() {
         }
 
         mutate(bookData);
+        setBookRide(false)
+
 
     }
 
