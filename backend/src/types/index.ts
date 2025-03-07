@@ -72,6 +72,13 @@ export interface StatusUpdateRequest extends Request {
     }
 }
 
+export interface HistoryRequest extends Request {
+    body: {
+        passengerId?: string;
+        driverId?: string;
+    }
+}
+
 export interface CreateOrderRequest {
     body: {
         id: mongoose.Schema.Types.ObjectId;

@@ -30,3 +30,19 @@ export const bookRideValidation = checkSchema({
         },
     },
 });
+
+
+export const historyValidation = checkSchema({
+    driverId: {
+        in: ["body"],
+        exists: { errorMessage: "Driver ID is required" },
+        isString: { errorMessage: "Driver ID must be a string" },
+        notEmpty: { errorMessage: "Driver ID cannot be empty" },
+    },
+    passengerId: {
+        in: ["body"],
+        exists: { errorMessage: "Passenger ID is required" },
+        isString: { errorMessage: "Passenger ID must be a string" },
+        notEmpty: { errorMessage: "Passenger ID cannot be empty" },
+    }
+})

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import BookRideService from "../services/BookRideService";
 import { HTTP_STATUS } from "../utils/constant";
-import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, HistoryRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
 import logger from "../config/logger";
 import ShareRideModel from "../model/ShareRide";
 
@@ -209,6 +209,30 @@ class BookRideController {
         }
     }
 
+    async getHistory(req: HistoryRequest, res: Response, next: NextFunction) {
+        try {
+            const { driverId, passengerId } = req.body;
+
+            if (driverId) {
+                const histories = await this.bookRideService.driverHistory(driverId);
+                res.status(HTTP_STATUS.OK).json({
+                    success: true,
+                    histories
+                })
+
+            }
+
+            if (passengerId) {
+                const histories = await this.bookRideService.passangerHistory(passengerId);
+                res.status(HTTP_STATUS.OK).json({
+                    success: true,
+                    histories
+                })
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default BookRideController;

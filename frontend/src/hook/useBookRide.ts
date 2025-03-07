@@ -28,7 +28,7 @@ export const useIncomingRideFetchQuery = (pagination: IncomingRideBookingPaginat
 export const useUpdateBookingRideStatusMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationKey: ["update-booking-status"],
+        mutationKey: ["update-booking-status", "fetch-passengers-booking"],
         mutationFn: updateBookingRideStatusMutation,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["fetch-incoming-ride-booking"] })

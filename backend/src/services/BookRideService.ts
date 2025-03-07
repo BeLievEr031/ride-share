@@ -83,6 +83,15 @@ class BookRideService {
     async deleteBooking(bookingId: string): Promise<IBook | null> {
         return await Book.findByIdAndDelete(bookingId);
     }
+
+    async driverHistory(driverId: string) {
+        return await Book.find({ driverId }).populate("rideId")
+    }
+
+    async passangerHistory(passengerId: string) {
+        return await Book.find({ passengerId }).populate("rideId")
+    }
 }
+
 
 export default BookRideService;

@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import BookRideController from "../controller/BookRideController";
 import BookRideService from "../services/BookRideService";
 import { bookRideValidation } from "../validator/bookRideValidation";
-import { BookPaginationRequest, BookRideRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
+import { BookPaginationRequest, BookRideRequest, HistoryRequest, IncomingRidePaginationRequest, StatusUpdateRequest, } from "../types";
 
 const bookRideRouter = express.Router();
 
@@ -38,6 +38,10 @@ bookRideRouter.put(
         bookRideController.updateStatus(req as StatusUpdateRequest, res, next)
 
 );
+
+bookRideRouter.get("/history", (req: Request, res: Response, next: NextFunction) =>
+    bookRideController.getHistory(req as HistoryRequest, res, next)
+)
 
 // Get booking by ID
 bookRideRouter.get(

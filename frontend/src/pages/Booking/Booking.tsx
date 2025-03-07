@@ -199,11 +199,9 @@ const BookingList: React.FC = () => {
         page: "1",
         limit: "25",
         sortBy: "createdAt",
-        order: "asc"
+        order: "desc"
     })
     const { data } = usePassengerBookingFetchQuery(pagination);
-
-    console.log(data?.data?.data?.bookings);
 
     return (
         <div className="p-6 space-y-6">
