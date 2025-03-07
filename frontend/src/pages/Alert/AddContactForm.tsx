@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 interface Props {
-    onAddContact: (contact: { name: string; phone: string }) => void;
+    onAddContact: (contact: { name: string; email: string }) => void;
     onClose: () => void;
 }
 
 const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
     const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,16 +17,13 @@ const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
             return toast.error("Name must be at least 3 characters");
         }
 
-        if (!phone.trim()) {
-            // return toast.error("Phone number is required");
-        } else if (!/^\+91[6-9]\d{9}$/.test(phone.trim())) {
-            return toast.error("Phone number must contain only digits & must have 10 digits after +91");
-        } else if (phone.trim().length != 13) {
-            return toast.error("Phone number must be at least 10 digits");
+        if (!email.trim()) {
+            return toast.error("Email is required");
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim())) {
+            return toast.error("Please enter a valid email address");
         }
 
-
-        onAddContact({ name, phone });
+        onAddContact({ name, email });
     };
 
     return (
@@ -44,8 +41,8 @@ const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
                     <input
                         type="tel"
                         placeholder="Phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="w-full border px-3 py-2 rounded-md"
                     />
                     <div className="flex justify-between">

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 interface Props {
-    contact: { id: number; name: string; phone: string };
+    contact: { id: number; name: string; email: string };
     onUpdateContact: (contact: { id: number; name: string; phone: string }) => void;
     onClose: () => void;
 }
 
 const EditContactForm: React.FC<Props> = ({ contact, onUpdateContact, onClose }) => {
     const [name, setName] = useState(contact.name);
-    const [phone, setPhone] = useState(contact.phone);
+    const [phone, setPhone] = useState(contact.email);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

@@ -90,7 +90,6 @@ export interface ContactRequest extends Request {
 }
 
 export interface IPhone {
-    numbers: string[];
     url: string;
     email: string[]
 }

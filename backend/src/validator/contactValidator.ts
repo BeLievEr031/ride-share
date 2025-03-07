@@ -35,24 +35,26 @@ export const contactValidator = checkSchema({
 });
 
 
-export const validateMobileNumbers = checkSchema({
-    numbers: {
+
+export const validateEmails = checkSchema({
+    email: {
         in: ["body"], // The array should be in the request body
         isArray: {
-            errorMessage: "mobileNumbers must be an array",
+            errorMessage: "emails must be an array",
         },
         notEmpty: {
-            errorMessage: "mobileNumbers array should not be empty",
+            errorMessage: "emails array should not be empty",
         },
         custom: {
             options: (value) => {
-                const phoneRegex = /^\+91[6-9]\d{9}$/;
-                if (!value.every((num: string) => typeof num === "string" && phoneRegex.test(num))) {
-                    throw new Error("Each mobile number must be a valid string of 10 digits.");
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!value.every((email: string) => typeof email === "string" && emailRegex.test(email))) {
+                    throw new Error("Each email must be a valid email address.");
                 }
                 return true;
             },
         },
     },
 });
+
 

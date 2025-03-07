@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import ContactController from "../controller/ContactController";
 import ContactService from "../services/ContactService";
-import { contactValidator, validateMobileNumbers } from "../validator/contactValidator";
+import { contactValidator, validateEmails } from "../validator/contactValidator";
 import { ContactRequest, PaginationRequest, SendAlertRequest } from "../types";
 const contactRouter = express.Router();
 
@@ -9,7 +9,7 @@ const contactService = new ContactService();
 const contactController = new ContactController(contactService);
 
 
-contactRouter.post("/alert", validateMobileNumbers, (req: Request, res: Response, next: NextFunction) => contactController.sendAlert(req as SendAlertRequest, res, next))
+contactRouter.post("/alert", validateEmails, (req: Request, res: Response, next: NextFunction) => contactController.sendAlert(req as SendAlertRequest, res, next))
 
 // Create Contact
 contactRouter.post("/", contactValidator, (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next));

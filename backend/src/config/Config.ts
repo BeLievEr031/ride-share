@@ -9,7 +9,8 @@ const { PORT,
     AWS_REGION,
     AWS_BUCKET_NAME,
     RAZORPAY_KEY_SECRET,
-    RAZORPAY_KEY_ID
+    RAZORPAY_KEY_ID,
+    GMAIL_PASS_KEY
 } = process.env
 
 const Config = {
@@ -21,7 +22,8 @@ const Config = {
     AWS_REGION,
     AWS_BUCKET_NAME,
     RAZORPAY_KEY_SECRET,
-    RAZORPAY_KEY_ID
+    RAZORPAY_KEY_ID,
+    GMAIL_PASS_KEY
 
 } as const;
 

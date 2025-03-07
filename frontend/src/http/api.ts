@@ -1,5 +1,5 @@
 import api from ".";
-import { BookingPagination, BookingStatusUpdate, IBook, IncomingRideBookingPagination, IPagination, ISearch, IShareRide } from "../types";
+import { BookingPagination, BookingStatusUpdate, IBook, IContact, IEmail, IncomingRideBookingPagination, IPagination, ISearch, IShareRide } from "../types";
 
 export const rideShareCreateMutation = (data: IShareRide) => api.post("/ride", data)
 export const rideShareDeleteMutation = (data: IShareRide) => api.post("/ride", data)
@@ -18,3 +18,12 @@ export const updateBookingRideStatusMutation = (data: BookingStatusUpdate) => ap
 
 
 export const createPaymentOrder = (data: { id: string }) => api.post(`/payment/create-order`, data)
+
+
+export const createContact = (data: IContact) => api.post("/contact", data)
+
+export const fetchContact = (pagination: IPagination) => api.get(`/contact?page=${pagination.page}&limit=${pagination.limit}&sortBy=${pagination.sortBy}&order=${pagination.order}&userId=${pagination.userId!}`)
+
+export const deleteContact = (id: string) => api.delete(`/contact/${id}`)
+
+export const sendAlert = (data: IEmail) => api.post("/contact/alert", data)

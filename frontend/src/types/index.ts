@@ -20,8 +20,9 @@ export interface IPagination {
     page: number;
     limit: number;
     sortBy: string;
-    order: "asc" | "desc";
+    order: "asc" | "desc" | string;
     clerkId: string;
+    userId?: string;
 }
 
 export interface ISearch {
@@ -57,4 +58,16 @@ export interface IncomingRideBookingPagination {
 export interface BookingStatusUpdate {
     _id: string;
     status: string;
+}
+
+export interface IContact {
+    _id: string;
+    clerkId: string;
+    name: string;
+    email: string;
+}
+
+export interface IEmail {
+    email: string[];
+    url: string;
 }

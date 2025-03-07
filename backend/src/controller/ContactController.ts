@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 import ContactService from "../services/ContactService";
 import { HTTP_STATUS } from "../utils/constant";
 import { ContactRequest, PaginationRequest, SendAlertRequest } from "../types";
-import sendOTPs from "../utils/sendAlertMsg";
+import sendAlertMsg from "../utils/sendAlertMsg";
+import logger from "../config/logger";
 
 class ContactController {
     constructor(private contactService: ContactService) {
@@ -20,8 +21,8 @@ class ContactController {
             }
 
             const { email, url } = req.body;
-            await sendOTPs(email, url);
-
+            logger.info(email)
+            await sendAlertMsg(email, url);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: "Alert has been sent.",
