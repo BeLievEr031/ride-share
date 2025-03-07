@@ -1,3 +1,4 @@
+import BookRideModel from "../model/BookRide";
 import Ride from "../model/ShareRide";
 import { IShareRide } from "../types";
 
@@ -38,6 +39,7 @@ class RideShareService {
     }
 
     async delete(rideId: string): Promise<IShareRide | null> {
+        await BookRideModel.deleteMany({ rideId, status: "pending" })
         return await Ride.findByIdAndDelete(rideId);
     }
 
