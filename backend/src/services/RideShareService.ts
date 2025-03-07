@@ -39,7 +39,7 @@ class RideShareService {
     }
 
     async delete(rideId: string): Promise<IShareRide | null> {
-        await BookRideModel.deleteMany({ rideId, status: "pending" })
+        await BookRideModel.deleteMany({ rideId })
         return await Ride.findByIdAndDelete(rideId);
     }
 
