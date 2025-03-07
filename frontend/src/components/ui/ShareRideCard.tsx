@@ -1,8 +1,10 @@
 import React from "react";
 import { FaMapMarkerAlt, FaCalendarAlt, FaUser, FaDollarSign } from "react-icons/fa";
 import Button from "../Button";
+import { useRideDeleteMutation } from "../../hook/useRideShare";
 
 interface IShareRide {
+    _id?: string;
     clerkId: string;
     from: string;
     to: string;
@@ -13,6 +15,13 @@ interface IShareRide {
 }
 
 const ShareRideCard: React.FC<{ ride: IShareRide }> = ({ ride }) => {
+
+    const { mutate } = useRideDeleteMutation();
+
+    const handleDelete = (id: string) => {
+        mutate(id)
+    }
+
     return (
         <div className=" p-4 shadow-lg rounded-2xl border border-gray-200 bg-white">
             <div className="p-4 border-b">
@@ -40,7 +49,7 @@ const ShareRideCard: React.FC<{ ride: IShareRide }> = ({ ride }) => {
                     <p className="text-gray-700">Cost per seat: <span className="font-medium">${ride.cost}</span></p>
                 </div>
 
-                <Button variant="danger">Delete</Button>
+                <Button variant="danger" onClick={() => handleDelete(ride._id!)}>Delete</Button>
             </div>
         </div>
     );

@@ -40,7 +40,7 @@ function ShareRides() {
         page: 1,
         limit: 10,
         sortBy: "date",
-        order: "asc",
+        order: "desc",
         clerkId: user!.id,
     });
 

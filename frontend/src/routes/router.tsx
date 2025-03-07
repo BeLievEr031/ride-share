@@ -11,6 +11,7 @@ import Notification from "../pages/Notification/Notification";
 import IncomingRide from "../pages/IncomingRides/IncomingRides";
 import ShareRides from "../pages/Rides/ShareRides";
 import BookingList from "../pages/Booking/Booking";
+import TrackUser from "../pages/TrackUser/TrackUser";
 
 const router = createBrowserRouter([
     {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
     {
         path: "/auth",
         element: <Auth />
+    },
+    {
+        path: "/track-user",
+        element: <TrackUser />
     }
 ])
 

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { rideShareCreateMutation, rideShareFetchQuery, searchRideShareFetchQuery } from "../http/api"
+import { rideShareCreateMutation, rideShareDeleteMutation, rideShareFetchQuery, searchRideShareFetchQuery } from "../http/api"
 import { IPagination, ISearch } from "../types";
 
 export const useRideShareCreateMutation = (cb: (data: boolean) => void) => {
@@ -26,5 +26,16 @@ export const useRideShareSearchFetchQuery = (data: ISearch) => {
     return useQuery({
         queryKey: ["search-rides"],
         queryFn: () => searchRideShareFetchQuery(data),
+    })
+}
+
+export const useRideDeleteMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ["delete-ride-share"],
+        mutationFn: rideShareDeleteMutation,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["fetch-rides"] })
+        }
     })
 }
