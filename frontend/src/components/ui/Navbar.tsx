@@ -3,6 +3,7 @@ import { FaCar } from "react-icons/fa"; // For Report Incident icon
 import { TbBrandBooking } from "react-icons/tb";
 import Button from "../Button";
 import React from "react";
+import { useAuth } from "@clerk/clerk-react";
 
 interface IProp {
     setRideShare: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,8 +14,13 @@ const Navbar = ({ setRideShare }: IProp) => {
         setRideShare(true);
     }
 
+    const { signOut } = useAuth();
+    const handleLogout = () => {
+        signOut();
+    }
+
     return (
-        <nav className="flex justify-between items-center py-3 px-6 bg-white shadow-md sticky top-0">
+        <nav className="flex justify-between items-center py-3 px-6 bg-white shadow-md sticky top-0 z-[9999]">
             <div className="flex items-center">
                 <span className="text-purple-600 text-2xl font-bold flex items-center gap-2">
                     <FaCar size={25} color="" />
@@ -57,7 +63,7 @@ const Navbar = ({ setRideShare }: IProp) => {
                     <TbBrandBooking className="mr-2" size={25} />
                     Share Ride
                 </Button>
-                <Button variant="danger" className="font-semibold text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                <Button variant="danger" className="font-semibold text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={handleLogout}>
                     Logout
                 </Button>
             </div>

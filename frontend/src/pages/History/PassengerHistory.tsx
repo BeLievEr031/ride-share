@@ -48,7 +48,7 @@ const PassengerRideHistory: React.FC = () => {
     });
 
     const { data } = useHistoryFetchQuery(fetchQuery)
-    const ans = data?.data?.histories.map((item: IRide) => ({
+    const ans = data?.data?.histories.length > 0 ? data?.data?.histories.map((item: IRide) => ({
         id: `#${item._id.slice(0, 5)}`,  // Shortened unique ID
         from: item.rideId.from,  // Source location
         to: item.rideId.to,  // Destination location
@@ -61,7 +61,7 @@ const PassengerRideHistory: React.FC = () => {
         driver: item.rideId.name,  // Driver's name
         rating: 4.8,  // Placeholder rating
         status: item.status === "paid" ? "Completed" : "Pending",  // Set status based on payment status
-    }));
+    })) : [];
 
     return (
         <div className="max-w-4xl mx-auto mt-6 p-4">
